@@ -11,18 +11,18 @@ require "config.php";
 try {
     $connection = new PDO("mysql:host=$host", $username, $password, $options);
     //$sqls = file_get_contents("data/init.sql");
-	$sqls = [ 'DROP DATABASE evaluation',
+	$sqls = [ 'DROP DATABASE IF EXISTS evaluation',
 
 'CREATE DATABASE evaluation',
 
 'use evaluation',
 
 'CREATE TABLE typeUsers (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(30) NOT NULL
 )',
 'CREATE TABLE users (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	firstname VARCHAR(30) NOT NULL,
 	lastname VARCHAR(30) NOT NULL,
 	email VARCHAR(50) NOT NULL,
@@ -34,15 +34,15 @@ try {
 	CONSTRAINT userTypeId  FOREIGN KEY (userTypeId) REFERENCES typeUsers (id)
 )',
 'CREATE TABLE filieres (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(30) NOT NULL
 )',
 'CREATE TABLE modules (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(30) NOT NULL
 )',
 'CREATE TABLE niveaux (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(30) NOT NULL
 )',
 'CREATE TABLE userModules (
@@ -64,15 +64,15 @@ try {
 	CONSTRAINT filiereId  FOREIGN KEY (filiereId) REFERENCES filieres (id)
 )',
 'CREATE TABLE typeQuestion (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(30) NOT NULL
 )',
 'CREATE TABLE typeExam (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(30) NOT NULL
 )',
 'CREATE TABLE questions (
-	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	contenue VARCHAR(255) NOT NULL,
 	solution VARCHAR(255) NOT NULL,
 	difficulte INT(3),
@@ -118,7 +118,7 @@ try {
 	foreach ($sqls as $sql) {
         $connection->exec($sql);
     }
-    
+
     echo "Database and table users created successfully.";
 } catch(PDOException $error) {
     echo $sql . "<br>" . $error->getMessage();

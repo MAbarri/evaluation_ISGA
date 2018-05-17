@@ -4,9 +4,9 @@
     <div class="row">
       <div class="col">
         <div class="card card-body bg-light mt-5">
-          <h2>Dashboard <small class="text-muted"><?php echo $_SESSION['email']; ?></small></h2>
-          <p>Welcome to the dashboard <?php echo $_SESSION['name']; ?></p>
-          <p><a href="authentication/logout.php" class="btn btn-danger">Logout</a></p>
+          <h2>Dashboard <small class="text-muted"><?php echo $_SESSION['role']; ?></small></h2>
+          <p>Welcome to the dashboard</p>
+          <button><a href="authentication/logout.php">Logout</a></button>
         </div>
       </div>
     </div>

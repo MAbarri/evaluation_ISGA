@@ -28,7 +28,7 @@
     // Make sure errors are empty
     if(empty($email_err) && empty($password_err)){
       // Prepare query
-      $sql = 'SELECT firstname, email, password FROM users WHERE email = :email';
+      $sql = 'SELECT firstname, email, password, typeusers.name FROM users INNER JOIN typeusers ON users.userTypeId = typeusers.id WHERE email = :email';
 
       // Prepare statement
       if($stmt = $connection->prepare($sql)){
@@ -45,8 +45,17 @@
                 // SUCCESSFUL LOGIN
                 session_start();
                 $_SESSION['email'] = $email;
-                $_SESSION['name'] = $row['name'];
-                header('location: ../index.php');
+                $_SESSION['firstname'] = $row['firstname'];
+                $_SESSION['lastname'] = $row['lastname'];
+                $_SESSION['role'] = $row['name'];
+                switch ($_SESSION['role']) {
+                    case 'Admin':
+                        header('location: ../admin/index.php');
+                        break;
+                    case 'Professeur':
+                        header('location: ../index.php');
+                        break;
+                }
               } else {
                 // Display wrong password message
                 $password_err = 'The password you entered is not valid';

@@ -28,10 +28,10 @@
     // Make sure errors are empty
     if(empty($email_err) && empty($password_err)){
       // Prepare query
-      $sql = 'SELECT name, email, password FROM users WHERE email = :email';
+      $sql = 'SELECT firstname, email, password FROM users WHERE email = :email';
 
       // Prepare statement
-      if($stmt = $pdo->prepare($sql)){
+      if($stmt = $connection->prepare($sql)){
         // Bind params
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
 
@@ -46,7 +46,7 @@
                 session_start();
                 $_SESSION['email'] = $email;
                 $_SESSION['name'] = $row['name'];
-                header('location: index.php');
+                header('location: ../index.php');
               } else {
                 // Display wrong password message
                 $password_err = 'The password you entered is not valid';
@@ -64,7 +64,7 @@
     }
 
     // Close connection
-    unset($pdo);
+    unset($connection);
   }
 ?>
 
@@ -99,9 +99,9 @@
               <div class="col">
                 <input type="submit" value="Login" class="btn btn-success btn-block">
               </div>
-              <div class="col">
+              <!-- <div class="col">
                 <a href="register.php" class="btn btn-light btn-block">No account? Register</a>
-              </div>
+              </div> -->
             </div>
           </form>
         </div>

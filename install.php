@@ -23,14 +23,14 @@ try {
 )',
 'CREATE TABLE users (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-	firstname VARCHAR(30) NOT NULL,
-	lastname VARCHAR(30) NOT NULL,
+	firstname VARCHAR(30),
+	lastname VARCHAR(30),
 	email VARCHAR(50) NOT NULL,
-	password VARCHAR(20) NOT NULL,
+	password VARCHAR(60) NOT NULL,
 	age INT(3),
 	location VARCHAR(50),
 	date TIMESTAMP,
-	userTypeId int( 11 ) NOT NULL ,
+	userTypeId int( 11 ) ,
 	CONSTRAINT userTypeId  FOREIGN KEY (userTypeId) REFERENCES typeUsers (id)
 )',
 'CREATE TABLE filieres (

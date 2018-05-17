@@ -48,9 +48,11 @@
     }
 
     // Validate password
+    echo "____________________________";
+    echo strlen(password_hash($password, PASSWORD_DEFAULT));
     if(empty($password)){
       $password_err = 'Please enter password';
-    } elseif(strlen($password < 6)){
+    } elseif(strlen($password) < 6){
       $password_err = 'Password must be at least 6 characters';
     }
 

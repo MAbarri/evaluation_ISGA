@@ -6,21 +6,17 @@
  *
  */
 
-require "../config.php";
-require "../common.php";
+ require_once '../../../connection.php';
 
 if (isset($_POST['submit'])) {
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
 
   try  {
-    $connection = new PDO($dsn, $username, $password, $options);
-    
     $new_user = array(
       "firstname" => $_POST['firstname'],
       "lastname"  => $_POST['lastname'],
       "email"     => $_POST['email'],
-      "age"       => $_POST['age'],
-      "location"  => $_POST['location']
+      "userTypeId"     => $_POST['userTypeId'],
+      "password"  => password_hash($_POST['password'], PASSWORD_DEFAULT)
     );
 
     $sql = sprintf(
@@ -29,37 +25,50 @@ if (isset($_POST['submit'])) {
       implode(", ", array_keys($new_user)),
       ":" . implode(", :", array_keys($new_user))
     );
-    
+
     $statement = $connection->prepare($sql);
     $statement->execute($new_user);
+
+      header('location: index.php');
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
   }
 }
 ?>
-<?php require "templates/header.php"; ?>
+<?php require "../../templates/header.php"; ?>
 
+<?php include "../../shared/navbar.php"; ?>
   <?php if (isset($_POST['submit']) && $statement) : ?>
-    <blockquote><?php echo escape($_POST['firstname']); ?> successfully added.</blockquote>
+    <blockquote><?php echo $_POST['firstname']; ?> successfully added.</blockquote>
   <?php endif; ?>
 
-  <h2>Add a user</h2>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="card card-body bg-light mt-5">
+            <h2>Administration d'utilisateurs</h2>
+            <div class="row">
 
-  <form method="post">
-    <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-    <label for="firstname">First Name</label>
-    <input type="text" name="firstname" id="firstname">
-    <label for="lastname">Last Name</label>
-    <input type="text" name="lastname" id="lastname">
-    <label for="email">Email Address</label>
-    <input type="text" name="email" id="email">
-    <label for="age">Age</label>
-    <input type="text" name="age" id="age">
-    <label for="location">Location</label>
-    <input type="text" name="location" id="location">
-    <input type="submit" name="submit" value="Submit">
-  </form>
+            <h2>Add a user</h2>
 
-  <a href="index.php">Back to home</a>
+            <form method="post">
+              <input type="text" value="2" name="userTypeId" id="userTypeId" style="visibility:hidden">
+              <label for="firstname">First Name</label>
+              <input type="text" name="firstname" id="firstname">
+              <label for="lastname">Last Name</label>
+              <input type="text" name="lastname" id="lastname">
+              <label for="email">Email Address</label>
+              <input type="text" name="email" id="email">
+              <label for="email">Mot de passe</label>
+              <input type="password" name="password" id="password">
+              <input type="submit" name="submit" value="Submit">
+            </form>
 
-<?php require "templates/footer.php"; ?>
+            <a href="index.php">Back to home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<?php require "../../templates/footer.php"; ?>

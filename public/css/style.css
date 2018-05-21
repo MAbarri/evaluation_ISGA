@@ -13,3 +13,7 @@ th {
 	padding: 5px;
 	border-bottom: 1px solid #aaa;
 }
+.error-field {
+	    border: #cc3e3a 1px solid;
+			color: #cc3e3a;
+}

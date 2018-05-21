@@ -6,7 +6,7 @@
 require_once '../../../connection.php';
 
   try  {
-    $sql = "SELECT users.id, firstname, lastname, email, typeusers.name FROM users INNER JOIN typeusers ON users.userTypeId = typeusers.id";
+    $sql = "SELECT * FROM typeusers";
     $statement = $connection->prepare($sql);
     $statement->execute();
 
@@ -19,23 +19,17 @@ require_once '../../../connection.php';
     <div class="row">
       <div class="col">
         <div class="card card-body bg-light mt-5">
-          <h2>Administration d'utilisateurs</h2>
+          <h2>Administration de type des utilisateurs</h2>
           <div class="row">
 
             <table class="col-md-12 table table-hover">
               <tr>
                 <td>Nom</td>
-                <td>Prénom</td>
-                <td>email</td>
-                <td>Type</td>
                 <td>Actions</td>
               </tr>
 
               <?php foreach ($result as $row) : ?>
               <tr>
-                <td><?php echo $row["firstname"]; ?></td>
-                <td><?php echo $row["lastname"]; ?></td>
-                <td><?php echo $row["email"]; ?></td>
                 <td><?php echo $row["name"]; ?></td>
                 <td>
                 <a style="height: auto;" class="btn btn-xs btn-primary" href="update-single.php?id=<?php echo $row["id"]; ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>

@@ -22,7 +22,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/evaluation_ISGA/public/admin"><img src="http://placehold.it/150x50&text=Logo"></a>
+				<a class="navbar-brand" href="/evaluation_ISGA/public/admin"><img style="height: 40px; margin: 5px;" src="/evaluation_ISGA/public/img/logo.png"></a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

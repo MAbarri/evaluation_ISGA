@@ -48,18 +48,6 @@ if (isset($_POST['submit'])) {
 
     }
 }
-
-
-  try  {
-    $sql = "SELECT * FROM typeusers";
-    $statement = $connection->prepare($sql);
-    $statement->execute();
-
-    $result = $statement->fetchAll();
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
-
 ?>
 <?php require "../../templates/header.php"; ?>
 
@@ -92,16 +80,6 @@ if (isset($_POST['submit'])) {
                     <input class="form-control" type="text" name="email" id="email" placeholder="Entrez l'Email ...">
                   </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                    <label for="type">Type</label>
-                    <select class="form-control" id="type" name="userTypeId">
-                    <?php foreach ($result as $row) : ?>
-                      <option  value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
-                    <?php endforeach; ?>
-                    </select>
-                  </div>
-                  </div>
 
                   <div class="col-md-12">
                     <div class="row">
@@ -121,6 +99,7 @@ if (isset($_POST['submit'])) {
                       </div>
                     </div>
                   </div>
+                  <input type="text" value="2" name="userTypeId" id="userTypeId" style="visibility:hidden">
                   <a class="btn btn-danger pull-right" href="index.php" style="margin: 0px 5px">Annuler</a>
                   <input class="btn btn-success pull-right" type="submit" name="submit" value="Submit">
                 </form>

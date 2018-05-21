@@ -8,7 +8,7 @@ if (isset($_GET["id"])) {
 
     $id = $_GET["id"];
 
-    $sql = "DELETE FROM users WHERE id = :id";
+    $sql = "DELETE FROM modules WHERE id = :id";
 
     $statement = $connection->prepare($sql);
     $statement->bindValue(':id', $id);

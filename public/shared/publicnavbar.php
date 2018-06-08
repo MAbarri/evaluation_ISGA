@@ -31,7 +31,6 @@
     						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Questions</a>
     						<ul class="dropdown-menu">
     							<li><a href="/evaluation_ISGA/public/professeur/question/create.php">Proposer une Question</a></li>
-    							<li><a href="/evaluation_ISGA/public/professeur/question/correct.php">Corriger une Question</a></li>
     							<li><a href="/evaluation_ISGA/public/professeur/question/list.php">Base de Données Questions</a></li>
     						</ul>
     					</li>

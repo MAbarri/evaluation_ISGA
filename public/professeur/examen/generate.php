@@ -10,45 +10,34 @@
 
 if (isset($_POST['submit'])) {
 
+    // $sql = "SELECT * FROM question LIMIT ".$_POST['variants']*$_POST['questions'];
+    // $statement = $connection->prepare($sql);
+    // $statement->execute();
+    //
+    // $result = $statement->fetchAll();
+
+
       try  {
         $new_user = array(
-          "contenue" => $_POST['contenue'],
+          "typeExamId" => $_POST['typeExamId'],
           "userId" => $_SESSION['id'],
-          "typeQuestionId"     => $_POST['questionTypeId']
+          "date"     => date("Y-m-d H:i:s")
         );
 
         $sql = sprintf(
           "INSERT INTO %s (%s) values (%s)",
-          "questions",
+          "exams",
           implode(", ", array_keys($new_user)),
           ":" . implode(", :", array_keys($new_user))
         );
 
         $statement = $connection->prepare($sql);
         $statement->execute($new_user);
-        $questionid = $connection->lastInsertId();
 
-        try  {
-          $array = array(
-              array($_POST['choix1'], isset($_POST['someSwitchOption001']) && $_POST['someSwitchOption001'] ? 1 : 0, $questionid),
-              array($_POST['choix2'], isset($_POST['someSwitchOption002']) && $_POST['someSwitchOption002'] ? 1 : 0, $questionid),
-              array($_POST['choix3'], isset($_POST['someSwitchOption003']) && $_POST['someSwitchOption003'] ? 1 : 0, $questionid),
-              array($_POST['choix4'], isset($_POST['someSwitchOption004']) && $_POST['someSwitchOption004'] ? 1 : 0, $questionid),
-          );
-          foreach($array as $arrayItem){
-            $responsessql = "INSERT INTO reponse (contenue, correct, questionId) values (?,?,?)";
-            $responssestatement = $connection->prepare($responsessql);
-            $responssestatement->execute($arrayItem);
-          }
-
-          header('location: ../../index.php');
+          header('location: list.php');
         } catch(PDOException $error) {
           echo $sql . "<br>" . $error->getMessage();
         }
-
-      } catch(PDOException $error) {
-        echo $sql . "<br>" . $error->getMessage();
-      }
 }
 
 
@@ -76,7 +65,7 @@ if (isset($_POST['submit'])) {
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="type">Type</label>
-                      <select class="form-control" id="type" name="questionTypeId">
+                      <select class="form-control" id="type" name="typeExamId">
                       <?php foreach ($result as $row) : ?>
                         <option  value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
                       <?php endforeach; ?>

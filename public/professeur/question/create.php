@@ -33,6 +33,7 @@ if (isset($_POST['submit'])) {
               array($_POST['choix1'], isset($_POST['someSwitchOption001']) && $_POST['someSwitchOption001'] ? 1 : 0, $questionid),
               array($_POST['choix2'], isset($_POST['someSwitchOption002']) && $_POST['someSwitchOption002'] ? 1 : 0, $questionid),
               array($_POST['choix3'], isset($_POST['someSwitchOption003']) && $_POST['someSwitchOption003'] ? 1 : 0, $questionid),
+              array($_POST['choix4'], isset($_POST['someSwitchOption004']) && $_POST['someSwitchOption004'] ? 1 : 0, $questionid),
           );
           foreach($array as $arrayItem){
             $responsessql = "INSERT INTO reponse (contenue, correct, questionId) values (?,?,?)";

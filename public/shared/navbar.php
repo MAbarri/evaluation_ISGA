@@ -1,3 +1,16 @@
+<?php
+if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
+  header('location: authentication/login.php');
+  exit;
+} else {
+  switch (strtoupper($_SESSION['role'])) {
+      case 'PROFESSEUR':
+          header('location: ../index.php');
+          break;
+  }
+}
+ ?>
+
 <header>
 <div class="top_bar">
 <div class="container">

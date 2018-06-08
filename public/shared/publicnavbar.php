@@ -35,11 +35,7 @@
     						</ul>
     					</li>
     					<li class="dropdown">
-    						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Evaluation</a>
-    						<ul class="dropdown-menu">
-                  <li><a href="/evaluation_ISGA/public/professeur/examen/generate.php">Generer un Examen</a></li>
-    							<li><a href="/evaluation_ISGA/public/professeur/examen/list.php">Base de Données Examens</a></li>
-    						</ul>
+    						<a href="/evaluation_ISGA/public/professeur/examen/list.php"> Evaluation</a>
     					</li>
           <li><a href="/evaluation_ISGA/public/authentication/logout.php">Logout</a></li>
 

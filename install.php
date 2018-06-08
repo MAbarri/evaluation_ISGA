@@ -116,6 +116,8 @@ try {
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	typeExamId  int( 11 ) NOT NULL ,
 	date TIMESTAMP,
+	userId int( 11 ) NOT NULL ,
+	CONSTRAINT userId  FOREIGN KEY (userId) REFERENCES users(id),
 	CONSTRAINT typeExamId  FOREIGN KEY (typeExamId) REFERENCES typeExam(id)
 )',
 'CREATE TABLE examQuestions (

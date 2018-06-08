@@ -1,3 +1,7 @@
+
+<?php require "../../templates/header.php"; ?>
+
+<?php include "../../shared/publicnavbar.php"; ?>
 <?php
  require_once '../../../connection.php';
 
@@ -6,32 +10,44 @@
 
 if (isset($_POST['submit'])) {
 
-
-    if(empty($password_err) && empty($confirm_password_err)) {
       try  {
         $new_user = array(
-          "firstname" => $_POST['contenue'],
-          "lastname"  => $_POST['lastname'],
-          "email"     => $_POST['email'],
-          "questionTypeId"     => $_POST['questionTypeId']
+          "contenue" => $_POST['contenue'],
+          "userId" => $_SESSION['id'],
+          "typeQuestionId"     => $_POST['questionTypeId']
         );
 
         $sql = sprintf(
           "INSERT INTO %s (%s) values (%s)",
-          "users",
+          "questions",
           implode(", ", array_keys($new_user)),
           ":" . implode(", :", array_keys($new_user))
         );
 
         $statement = $connection->prepare($sql);
         $statement->execute($new_user);
+        $questionid = $connection->lastInsertId();
 
-        header('location: index.php');
+        try  {
+          $array = array(
+              array($_POST['choix1'], isset($_POST['someSwitchOption001']) && $_POST['someSwitchOption001'] ? 1 : 0, $questionid),
+              array($_POST['choix2'], isset($_POST['someSwitchOption002']) && $_POST['someSwitchOption002'] ? 1 : 0, $questionid),
+              array($_POST['choix3'], isset($_POST['someSwitchOption003']) && $_POST['someSwitchOption003'] ? 1 : 0, $questionid),
+          );
+          foreach($array as $arrayItem){
+            $responsessql = "INSERT INTO reponse (contenue, correct, questionId) values (?,?,?)";
+            $responssestatement = $connection->prepare($responsessql);
+            $responssestatement->execute($arrayItem);
+          }
+
+          header('location: ../../index.php');
+        } catch(PDOException $error) {
+          echo $sql . "<br>" . $error->getMessage();
+        }
+
       } catch(PDOException $error) {
         echo $sql . "<br>" . $error->getMessage();
       }
-
-    }
 }
 
 
@@ -46,9 +62,6 @@ if (isset($_POST['submit'])) {
   }
 
 ?>
-<?php require "../../templates/header.php"; ?>
-
-<?php include "../../shared/publicnavbar.php"; ?>
 
     <div class="container">
       <div class="row">
@@ -87,40 +100,40 @@ if (isset($_POST['submit'])) {
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess1" name="someSwitchOption001" type="checkbox"/>
+                            <input id="someSwitchOptionSuccess1" name="someSwitchOption001" type="checkbox" value="1"/>
                             <label for="someSwitchOptionSuccess1" class="label-success"></label>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-11" style="margin: 0 0 5px 0;">
-                        <input class="form-control" type="text" name="choix1" id="choix1" placeholder="Entrez un choix ...">
+                        <input class="form-control" type="text" name="choix2" id="choix1" placeholder="Entrez un choix ...">
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess2" name="someSwitchOption002" type="checkbox"/>
+                            <input id="someSwitchOptionSuccess2" name="someSwitchOption002" type="checkbox" value="0"/>
                             <label for="someSwitchOptionSuccess2" class="label-success"></label>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-11" style="margin: 0 0 5px 0;">
-                        <input class="form-control" type="text" name="choix1" id="choix1" placeholder="Entrez un choix ...">
+                        <input class="form-control" type="text" name="choix3" id="choix1" placeholder="Entrez un choix ...">
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess3" name="someSwitchOption003" type="checkbox"/>
+                            <input id="someSwitchOptionSuccess3" name="someSwitchOption003" type="checkbox" value="0"/>
                             <label for="someSwitchOptionSuccess3" class="label-success"></label>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-11" style="margin: 0 0 5px 0;">
-                        <input class="form-control" type="text" name="choix1" id="choix1" placeholder="Entrez un choix ...">
+                        <input class="form-control" type="text" name="choix4" id="choix1" placeholder="Entrez un choix ...">
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess4" name="someSwitchOption004" type="checkbox"/>
+                            <input id="someSwitchOptionSuccess4" name="someSwitchOption004" type="checkbox" value="0"/>
                             <label for="someSwitchOptionSuccess4" class="label-success"></label>
                         </div>
                       </div>

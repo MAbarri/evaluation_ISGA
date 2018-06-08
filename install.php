@@ -78,7 +78,6 @@ try {
 'CREATE TABLE questions (
 	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	contenue VARCHAR(255) NOT NULL,
-	solution VARCHAR(255) NOT NULL,
 	difficulte INT(3),
 	rating INT(3),
 	nbUtilisation INT(3),
@@ -87,6 +86,13 @@ try {
 	CONSTRAINT userId  FOREIGN KEY (userId) REFERENCES users(id),
 	typeQuestionId int( 11 ) NOT NULL ,
 	CONSTRAINT typeQuestionId   FOREIGN KEY (typeQuestionId ) REFERENCES typeQuestion(id)
+)',
+'CREATE TABLE reponse (
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	contenue VARCHAR(255) NOT NULL,
+	correct BOOLEAN NOT NULL,
+	questionId int( 11 ) NOT NULL ,
+	CONSTRAINT questionId   FOREIGN KEY (questionId ) REFERENCES questions(id)
 )',
 'CREATE TABLE questionModules (
 	moduleId int( 11 ) NOT NULL ,

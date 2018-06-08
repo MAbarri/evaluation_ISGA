@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="/evaluation_ISGA/public/css/login-style.css">
 	<link rel="stylesheet" href="/evaluation_ISGA/public/css/navbar-style.css">
 	<link rel="stylesheet" href="/evaluation_ISGA/public/css/style.css">
+	<link rel="stylesheet" href="/evaluation_ISGA/public/css/material-switch.css">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 

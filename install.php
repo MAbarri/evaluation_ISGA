@@ -5,7 +5,11 @@
  * new database and table with structure.
  *
  */
+/*
 
+  Admin email :a@a.a
+  Admin PWD   : admin123
+*/
 require "config.php";
 
 try {
@@ -113,7 +117,9 @@ try {
 	CONSTRAINT examId FOREIGN KEY (examId ) REFERENCES exams(id),
 	questionId int( 11 ) NOT NULL ,
 	CONSTRAINT questionId  FOREIGN KEY (questionId) REFERENCES questions(id)
-)'
+)',
+'INSERT INTO typeusers VALUES (1, "Admin")',
+'INSERT INTO users VALUES (1, "Admin", "Super", "a@a.a", "$2y$10$ruS/9.pQaqmmANuQd2i4YOsrMNswSw7BmZE8MHsxJnybXJJdCkCeK", NULL, NULL, NULL, 1)'
 ];
 	foreach ($sqls as $sql) {
         $connection->exec($sql);

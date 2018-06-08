@@ -28,7 +28,7 @@
     // Make sure errors are empty
     if(empty($email_err) && empty($password_err)){
       // Prepare query
-      $sql = 'SELECT firstname, lastname, email, password, typeusers.name FROM users INNER JOIN typeusers ON users.userTypeId = typeusers.id WHERE email = :email';
+      $sql = 'SELECT users.id, firstname, lastname, email, password, typeusers.name FROM users INNER JOIN typeusers ON users.userTypeId = typeusers.id WHERE email = :email';
 
       // Prepare statement
       if($stmt = $connection->prepare($sql)){
@@ -48,6 +48,7 @@
                 $_SESSION['firstname'] = $row['firstname'];
                 $_SESSION['lastname'] = $row['lastname'];
                 $_SESSION['role'] = $row['name'];
+                $_SESSION['id'] = $row['id'];
                 switch (strtoupper($_SESSION['role'])) {
                     case 'ADMIN':
                         header('location: ../admin/index.php');

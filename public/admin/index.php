@@ -6,7 +6,7 @@
       <div class="col">
         <div class="card card-body bg-light mt-5">
           <h2>Administration</h2>
-          <p>Welcome to the admin dashboard</p>
+          <p>Bienvenue Dans le Tableau de Bord</p>
         </div>
       </div>
     </div>

@@ -127,6 +127,8 @@ try {
 	CONSTRAINT questionId  FOREIGN KEY (questionId) REFERENCES questions(id)
 )',
 'INSERT INTO typeusers VALUES (1, "Admin")',
+'INSERT INTO typeusers VALUES (2, "Professeur")',
+'INSERT INTO typeusers VALUES (3, "Etudient")',
 'INSERT INTO users VALUES (1, "Admin", "Super", "a@a.a", "$2y$10$ruS/9.pQaqmmANuQd2i4YOsrMNswSw7BmZE8MHsxJnybXJJdCkCeK", NULL, NULL, NULL, 1)'
 ];
 	foreach ($sqls as $sql) {

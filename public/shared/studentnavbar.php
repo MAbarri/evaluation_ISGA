@@ -1,10 +1,10 @@
 <?php
 if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
-    header('location: authentication/login.php');
+    header('location: ../authentication/login.php');
   exit;
 } else {
-  if(strtoupper($_SESSION['role']) !== 'PROFESSEUR')
-      header('location: authentication/login.php');
+  if(strtoupper($_SESSION['role']) !== 'ETUDIENT')
+      header('location: ../authentication/login.php');
 }
  ?>
 <header>
@@ -31,20 +31,13 @@ if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="/evaluation_ISGA/public/"><img style="height: 40px; margin: 5px;" src="/evaluation_ISGA/public/img/logo.png"></a>
+				<a class="navbar-brand" href="/evaluation_ISGA/public/student/myExams.php"><img style="height: 40px; margin: 5px;" src="/evaluation_ISGA/public/img/logo.png"></a>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
     					<li class="dropdown">
-    						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Questions</a>
-    						<ul class="dropdown-menu">
-    							<li><a href="/evaluation_ISGA/public/professeur/question/create.php">Proposer une Question</a></li>
-    							<li><a href="/evaluation_ISGA/public/professeur/question/list.php">Base de Données Questions</a></li>
-    						</ul>
-    					</li>
-    					<li class="dropdown">
-    						<a href="/evaluation_ISGA/public/professeur/examen/list.php"> Evaluation</a>
+    						<a href="/evaluation_ISGA/public/student/myExams.php"> Evaluation</a>
     					</li>
           <li><a href="/evaluation_ISGA/public/authentication/logout.php">Logout</a></li>
 

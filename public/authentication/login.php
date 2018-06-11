@@ -56,6 +56,9 @@
                     case 'PROFESSEUR':
                         header('location: ../index.php');
                         break;
+                    case 'ETUDIENT':
+                        header('location: ../student/myExams.php');
+                        break;
                 }
               } else {
                 // Display wrong password message

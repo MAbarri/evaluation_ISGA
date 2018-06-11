@@ -3,11 +3,8 @@ if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
   header('location: authentication/login.php');
   exit;
 } else {
-  switch (strtoupper($_SESSION['role'])) {
-      case 'PROFESSEUR':
-          header('location: ../index.php');
-          break;
-  }
+  if(strtoupper($_SESSION['role']) !== 'ADMIN')
+      header('location: authentication/login.php');
 }
  ?>
 

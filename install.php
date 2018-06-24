@@ -127,12 +127,20 @@ try {
 	CONSTRAINT questionId  FOREIGN KEY (questionId) REFERENCES questions(id)
 )',
 'CREATE TABLE etudExam (
+	id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	examId int( 11 ) NOT NULL ,
 	CONSTRAINT examId FOREIGN KEY (examId ) REFERENCES exams(id),
 	userId int( 11 ) NOT NULL ,
 	CONSTRAINT userId  FOREIGN KEY (userId) REFERENCES users(id),
 	date TIMESTAMP
-
+)',
+'CREATE TABLE etudExamReponse (
+	etudexamId int( 11 ) NOT NULL ,
+	CONSTRAINT etudexamId FOREIGN KEY (etudexamId) REFERENCES etudExam(id),
+	questionId int( 11 ) NOT NULL ,
+	CONSTRAINT questionId  FOREIGN KEY (questionId) REFERENCES questions(id),
+	reponseId int( 11 ) NOT NULL ,
+	CONSTRAINT reponseId  FOREIGN KEY (reponseId) REFERENCES reponse(id)
 )',
 'INSERT INTO typeusers VALUES (1, "Admin")',
 'INSERT INTO typeusers VALUES (2, "Professeur")',

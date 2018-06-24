@@ -9,11 +9,39 @@ require_once '../../connection.php';
     $sql = "SELECT exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams
         INNER JOIN users ON users.id = exams.userId
-        INNER JOIN typeExam ON typeExam.id = exams.typeExamId";
+        INNER JOIN typeExam ON typeExam.id = exams.typeExamId
+    WHERE exams.id = '".$_GET['exam']."'";
     $statement = $connection->prepare($sql);
     $statement->execute();
 
-    $result = $statement->fetchAll();
+    $examobject = $statement->fetch(PDO::FETCH_ASSOC);
+
+  $sqlQuestions = "SELECT questions.id, questions.contenue as contenue, reponse.contenue as reponsecontent
+  FROM questions
+    INNER JOIN examquestions ON questions.id = examquestions.questionid
+    INNER JOIN reponse ON questions.id = reponse.questionid
+    WHERE examquestions.examid = ".$_GET['exam'];
+    $statementQuestions = $connection->prepare($sqlQuestions);
+    $statementQuestions->execute();
+
+    $result = $statementQuestions->fetchAll();
+
+    $finalArray = array();
+    $id = null;
+    foreach ($result as $value) {
+      if($id != $value["id"]) {
+        if($id != null) {
+          array_push($finalArray, $finalquestion);
+        }
+        $finalquestion = array(
+          "question" => $value['contenue'],
+          "responses" => array()
+        );
+        $id = $value["id"];
+      }
+      array_push($finalquestion['responses'], $value['reponsecontent']);
+    }
+      array_push($finalArray, $finalquestion);
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
   }
@@ -24,7 +52,7 @@ require_once '../../connection.php';
         <div class="card card-body bg-light mt-5">
           <div class="row">
             <div class="col-md-10">
-              <h2>Examen QCM XXXX<small> Veulliez selectionnez la/les réponses correct </small></h2>
+              <h2> Examen <?php echo $examobject['date'] ?> <small> Veulliez selectionnez la/les réponses correct </small></h2>
             </div>
             <div class="col-md-2">
               <a class="btn btn-success pull-right">C'est fini</a>
@@ -38,19 +66,19 @@ require_once '../../connection.php';
                 <td class="col-md-4">Choix</td>
               </tr>
 
-              <?php foreach ($result as $row) : ?>
+              <?php foreach ($finalArray as $row) : ?>
               <tr>
-                <td>4+4 = ?</td>
+                <td> <?php echo $row["question"]; ?> </td>
                 <td>
-                  <div class="checkbox">
-                    <label><input type="checkbox"> 8</label>
-                  </div>
-                  <div class="checkbox">
-                    <label><input type="checkbox"> 12</label>
-                  </div>
-                  <div class="checkbox">
-                    <label><input type="checkbox"> 73</label>
-                  </div>
+                  <?php
+                   if(count($row['responses'])){
+                      echo "<div class=\"checkbox\">";
+                      foreach($row['responses'] as $responserow){
+                         echo "<label><input type=\"checkbox\">$responserow</label>";
+                      }
+                      echo "</div>";
+                   }
+                   ?>
                 </td>
               </tr>
             <?php endforeach; ?>

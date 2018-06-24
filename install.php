@@ -126,6 +126,14 @@ try {
 	questionId int( 11 ) NOT NULL ,
 	CONSTRAINT questionId  FOREIGN KEY (questionId) REFERENCES questions(id)
 )',
+'CREATE TABLE etudExam (
+	examId int( 11 ) NOT NULL ,
+	CONSTRAINT examId FOREIGN KEY (examId ) REFERENCES exams(id),
+	userId int( 11 ) NOT NULL ,
+	CONSTRAINT userId  FOREIGN KEY (userId) REFERENCES users(id),
+	date TIMESTAMP
+
+)',
 'INSERT INTO typeusers VALUES (1, "Admin")',
 'INSERT INTO typeusers VALUES (2, "Professeur")',
 'INSERT INTO typeusers VALUES (3, "Etudient")',

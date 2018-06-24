@@ -15,8 +15,6 @@ if (isset($_POST['submit'])) {
     // $statement->execute();
     //
     // $result = $statement->fetchAll();
-
-
       try  {
         $new_user = array(
           "typeExamId" => $_POST['typeExamId'],
@@ -33,7 +31,32 @@ if (isset($_POST['submit'])) {
 
         $statement = $connection->prepare($sql);
         $statement->execute($new_user);
+        $examid = $connection->lastInsertId();
 
+        $sqlQuestion = "SELECT * FROM questions LIMIT ".$_POST['questionsNombres'];
+        $statementQuestion = $connection->prepare($sqlQuestion);
+        $statementQuestion->execute();
+
+        $questionList = $statementQuestion->fetchAll();
+
+        foreach($questionList as $singleQuestion){
+          $questionexam = array(
+            "examId" => $examid,
+            "questionId" => $singleQuestion['id']
+          );
+
+          $sqlquestionexam = sprintf(
+            "INSERT INTO %s (%s) values (%s)",
+            "examQuestions",
+            implode(", ", array_keys($questionexam)),
+            ":" . implode(", :", array_keys($questionexam))
+          );
+
+          $statementquestionexam = $connection->prepare($sqlquestionexam);
+          $statementquestionexam->execute($questionexam);
+
+
+        }
           header('location: list.php');
         } catch(PDOException $error) {
           echo $sql . "<br>" . $error->getMessage();
@@ -84,7 +107,7 @@ if (isset($_POST['submit'])) {
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="contenue">Nombre de Questions</label>
-                            <input class="form-control" type="text" name="questions" id="questions" placeholder="Entrez le nombre de questions ...">
+                            <input class="form-control" type="text" name="questionsNombres" id="questions" placeholder="Entrez le nombre de questions ...">
                         </div>
                       </div>
                     </div>

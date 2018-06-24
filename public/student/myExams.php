@@ -6,7 +6,7 @@
 require_once '../../connection.php';
 
   try  {
-    $sql = "SELECT exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
+    $sql = "SELECT exams.id as examid, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams
         INNER JOIN users ON users.id = exams.userId
         INNER JOIN typeExam ON typeExam.id = exams.typeExamId";
@@ -46,7 +46,7 @@ require_once '../../connection.php';
                 <td><?php echo $row["date"]; ?></td>
                 <td>
                   <a class="btn btn-danger pull-right" href="/evaluation_ISGA/public/professeur/examen/generate.php">Annuler l'Examen</a>
-                  <a class="btn btn-success pull-right" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php">Passer l'Examen</a>
+                  <a class="btn btn-success pull-right" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam=<?php echo $row["examid"]; ?>" >Passer l'Examen</a>
                 </td>
               </tr>
             <?php endforeach; ?>

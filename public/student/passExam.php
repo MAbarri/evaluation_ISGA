@@ -68,7 +68,6 @@ require_once '../../connection.php';
           $statementpassing = $connection->prepare($sql);
           $statementpassing->execute($new_passing);
           $etudExamId = $connection->lastInsertId();
-          echo $etudExamId;
           try  {
 
             foreach($finalArray as $row){

@@ -12,8 +12,30 @@ require_once '../../connection.php';
         INNER JOIN typeExam ON typeExam.id = exams.typeExamId";
     $statement = $connection->prepare($sql);
     $statement->execute();
-
     $result = $statement->fetchAll();
+
+    $finalResult = array();
+    foreach ($result as $exam) {
+      $sql = "SELECT *
+              FROM etudExam
+              INNER JOIN etudExamReponse on etudExamReponse.etudexamId = etudExam.id
+              INNER JOIN reponse on etudExamReponse.reponseId = reponse.id
+              WHERE etudExam.examId =".$exam['examid']." AND etudExam.userId = ".$_SESSION['id'];
+      $statement = $connection->prepare($sql);
+      $statement->execute();
+      $resultResponses = $statement->fetchAll();
+      $score = 0;
+      $correct = 0;
+      $total = 0;
+      foreach ($resultResponses as $response) {
+        $total++;
+        if($response['correct'] == 1)
+        $correct++;
+      }
+      $score = $total > 0 ? $correct/$total*100 : 0;
+      array_push($finalResult, array("data"=> $exam, "score" => $score, "total" => $total));
+
+    }
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
   }
@@ -35,18 +57,18 @@ require_once '../../connection.php';
                 <td>Type</td>
                 <td>Nombre de Question</td>
                 <td>Date expiration</td>
-                <td>actions</td>
+                <td>Score/Action</td>
               </tr>
 
-              <?php foreach ($result as $row) : ?>
+              <?php foreach ($finalResult as $row) : ?>
               <tr>
-                <td><?php echo $row["owner"]; ?></td>
-                <td><?php echo $row["type"]; ?></td>
+                <td><?php echo $row["data"]["owner"]; ?></td>
+                <td><?php echo $row["data"]["type"]; ?></td>
                 <td><?php echo "nb Question" /*$row["choix"];*/ ?></td>
-                <td><?php echo $row["date"]; ?></td>
+                <td><?php echo $row["data"]["date"]; ?></td>
                 <td>
-                  <a class="btn btn-danger pull-right" href="/evaluation_ISGA/public/professeur/examen/generate.php">Annuler l'Examen</a>
-                  <a class="btn btn-success pull-right" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam=<?php echo $row["examid"]; ?>" >Passer l'Examen</a>
+                  <?php if($row['total'] > 0) echo $row["score"]; else echo '<a class="btn btn-success pull-right" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam='.$row["data"]["examid"].'" >Passer l\'Examen</a>'; ?>
+
                 </td>
               </tr>
             <?php endforeach; ?>

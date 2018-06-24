@@ -30,10 +30,10 @@ if (isset($_POST['submit'])) {
 
         try  {
           $array = array(
-              array($_POST['choix1'], isset($_POST['someSwitchOption001']) && $_POST['someSwitchOption001'] ? 1 : 0, $questionid),
-              array($_POST['choix2'], isset($_POST['someSwitchOption002']) && $_POST['someSwitchOption002'] ? 1 : 0, $questionid),
-              array($_POST['choix3'], isset($_POST['someSwitchOption003']) && $_POST['someSwitchOption003'] ? 1 : 0, $questionid),
-              array($_POST['choix4'], isset($_POST['someSwitchOption004']) && $_POST['someSwitchOption004'] ? 1 : 0, $questionid),
+              array($_POST['choix1'], isset($_POST['someSwitchOption001']) && $_POST['someSwitchOption001'] == "on" ? 1 : 0, $questionid),
+              array($_POST['choix2'], isset($_POST['someSwitchOption002']) && $_POST['someSwitchOption002'] == "on" ? 1 : 0, $questionid),
+              array($_POST['choix3'], isset($_POST['someSwitchOption003']) && $_POST['someSwitchOption003'] == "on" ? 1 : 0, $questionid),
+              array($_POST['choix4'], isset($_POST['someSwitchOption004']) && $_POST['someSwitchOption004'] == "on" ? 1 : 0, $questionid),
           );
           foreach($array as $arrayItem){
             $responsessql = "INSERT INTO reponse (contenue, correct, questionId) values (?,?,?)";
@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess1" name="someSwitchOption001" type="checkbox" value="1"/>
+                            <input id="someSwitchOptionSuccess1" name="someSwitchOption001" type="checkbox"/>
                             <label for="someSwitchOptionSuccess1" class="label-success"></label>
                         </div>
                       </div>
@@ -112,7 +112,7 @@ if (isset($_POST['submit'])) {
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess2" name="someSwitchOption002" type="checkbox" value="0"/>
+                            <input id="someSwitchOptionSuccess2" name="someSwitchOption002" type="checkbox"/>
                             <label for="someSwitchOptionSuccess2" class="label-success"></label>
                         </div>
                       </div>
@@ -123,7 +123,7 @@ if (isset($_POST['submit'])) {
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess3" name="someSwitchOption003" type="checkbox" value="0"/>
+                            <input id="someSwitchOptionSuccess3" name="someSwitchOption003" type="checkbox" />
                             <label for="someSwitchOptionSuccess3" class="label-success"></label>
                         </div>
                       </div>
@@ -134,7 +134,7 @@ if (isset($_POST['submit'])) {
                       </div>
                       <div class="col-md-1" style="padding: 12px;">
                         <div class="material-switch pull-right">
-                            <input id="someSwitchOptionSuccess4" name="someSwitchOption004" type="checkbox" value="0"/>
+                            <input id="someSwitchOptionSuccess4" name="someSwitchOption004" type="checkbox" />
                             <label for="someSwitchOptionSuccess4" class="label-success"></label>
                         </div>
                       </div>

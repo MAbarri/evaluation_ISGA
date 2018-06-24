@@ -6,10 +6,12 @@
 require_once '../../connection.php';
 
   try  {
-    $sql = "SELECT exams.id as examid, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
+    $sql = "SELECT COUNT(examquestions.questionId) as totalquestion, exams.id as examid, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams
         INNER JOIN users ON users.id = exams.userId
-        INNER JOIN typeExam ON typeExam.id = exams.typeExamId";
+        INNER JOIN typeExam ON typeExam.id = exams.typeExamId
+        INNER JOIN examquestions ON exams.id = examquestions.examId
+    GROUP BY examquestions.examId";
     $statement = $connection->prepare($sql);
     $statement->execute();
     $result = $statement->fetchAll();
@@ -32,7 +34,7 @@ require_once '../../connection.php';
         if($response['correct'] == 1)
         $correct++;
       }
-      $score = $total > 0 ? $correct/$total*100 : 0;
+      $score = $total > 0 ? $correct/$exam['totalquestion']*100 : 0;
       array_push($finalResult, array("data"=> $exam, "score" => $score, "total" => $total));
 
     }
@@ -64,7 +66,7 @@ require_once '../../connection.php';
               <tr>
                 <td><?php echo $row["data"]["owner"]; ?></td>
                 <td><?php echo $row["data"]["type"]; ?></td>
-                <td><?php echo "nb Question" /*$row["choix"];*/ ?></td>
+                <td><?php echo $row["data"]["totalquestion"] ?></td>
                 <td><?php echo $row["data"]["date"]; ?></td>
                 <td>
                   <?php if($row['total'] > 0) echo $row["score"]; else echo '<a class="btn btn-success pull-right" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam='.$row["data"]["examid"].'" >Passer l\'Examen</a>'; ?>

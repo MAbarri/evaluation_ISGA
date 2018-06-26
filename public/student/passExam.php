@@ -3,7 +3,6 @@
 <?php include "../shared/studentnavbar.php"; ?>
 <?php
 require_once '../../connection.php';
-
     if(!isset($_SESSION['timer'])){
         $_SESSION['timer'] = time();
         $_SESSION['time_passed'] = 0;
@@ -20,6 +19,7 @@ require_once '../../connection.php';
 
     $examobject = $statement->fetch(PDO::FETCH_ASSOC);
     $_SESSION['limit'] = $examobject["duree"]*60;
+    $_SESSION['currentexam'] = $_GET['exam'];
 
   $sqlQuestions = "SELECT questions.id, questions.contenue as contenue, reponse.id as reponseid, reponse.contenue as reponsecontent
   FROM questions
@@ -74,7 +74,6 @@ require_once '../../connection.php';
           $statementpassing->execute($new_passing);
           $etudExamId = $connection->lastInsertId();
           try  {
-
             foreach($finalArray as $row){
               foreach($row['responses'] as $responserow){
                 if(isset($_POST['question'.$row['id'].$responserow['id']]) && $_POST['question'.$row['id'].$responserow['id']] == 'on') {
@@ -86,7 +85,6 @@ require_once '../../connection.php';
                       "reponseId"  => $responserow['id']
                     );
 
-                    echo $etudExamId;
                     $sqlreponse = sprintf(
                       "INSERT INTO %s (%s) values (%s)",
                       "etudExamReponse",
@@ -97,10 +95,16 @@ require_once '../../connection.php';
                     $statementreponse = $connection->prepare($sqlreponse);
                     $statementreponse->execute($new_reponse);
 
-                    header('location: myExams.php');
                 }
               }
             }
+            unset($_SESSION['timer']);
+            unset($_SESSION['limit']);
+            unset($_SESSION['currentexam']);
+            unset($_SESSION['time_passed']);
+            unset($_SESSION['freezeExams']);
+            
+            header('location: myExams.php');
 
           } catch(PDOException $error) {
             echo $sql . "<br>" . $error->getMessage();
@@ -119,41 +123,44 @@ require_once '../../connection.php';
       <div class="col">
         <div class="card card-body bg-light mt-5">
 
-          <form method="post">
+          <form method="post" id="reponseform">
 
-          <div class="row">
-            <div class="col-md-10">
-              <h2> Examen (<?php echo $examobject['duree'] ?>min) <small> Veulliez selectionnez la/les réponses correct ( Temps passée : <?php echo round($_SESSION['time_passed']); ?>Min)</small></h2>
+            <div class="row">
+              <div class="col-md-10">
+                <h2> Examen (<?php echo $examobject['duree'] ?>min) <small> Veulliez selectionnez la/les réponses correct ( Temps passée : <span id="passedtime"></span> Min)</small></h2>
+              </div>
+              <div class="col-md-2">
+              <input class="btn btn-success pull-right" id="reponseformsubmit" type="submit" name="submit" value="C'est fini">
+              </div>
             </div>
-            <div class="col-md-2">
-            <input class="btn btn-success pull-right" type="submit" name="submit" value="C'est fini">
-            </div>
-          </div>
-          <div class="row">
-            <table class="col-md-12 table table-hover">
-              <tr>
-                <td class="col-md-8">Question</td>
-                <td class="col-md-4">Choix</td>
-              </tr>
+            <div class="row">
+              <table class="col-md-12 table table-hover">
+                <tr>
+                  <td class="col-md-8">Question</td>
+                  <td class="col-md-4">Choix</td>
+                </tr>
 
-              <?php foreach ($finalArray as $row) : ?>
-              <tr>
-                <td> <?php echo $row["question"]; ?> </td>
-                <td>
-                  <?php
-                   if(count($row['responses'])){
-                      echo "<div class=\"checkbox\">";
-                      foreach($row['responses'] as $responserow){
-                         echo "<label><input type=\"checkbox\" name='question".$row['id'].$responserow['id']."'>".$responserow['reponsecontent']."</label>";
-                      }
-                      echo "</div>";
-                   }
-                   ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-            </table>
-          </div>
+                <?php foreach ($finalArray as $row) : ?>
+                <tr>
+                  <td> <?php echo $row["question"]; ?> </td>
+                  <td>
+                    <?php
+                     if(count($row['responses'])){
+                        echo "<div class=\"checkbox\">";
+                        foreach($row['responses'] as $responserow){
+                          if(isset($_SESSION['freezeExams']) && $_SESSION['freezeExams'])
+                            echo "<label><input disabled type=\"checkbox\" name='question".$row['id'].$responserow['id']."'>".$responserow['reponsecontent']."</label>";
+                          else
+                           echo "<label><input type=\"checkbox\" name='question".$row['id'].$responserow['id']."'>".$responserow['reponsecontent']."</label>";
+                        }
+                        echo "</div>";
+                     }
+                     ?>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+              </table>
+            </div>
         </form>
         </div>
       </div>
@@ -161,10 +168,13 @@ require_once '../../connection.php';
   </div>
   <script>
       $(document).ready(function(){
+          $("#countdowntimer").load("countdown.php");
+          $("#passedtime").load("passedtime.php");
           setInterval(function() {
               $("#countdowntimer").load("countdown.php");
-          }, 60000);
+              $("#passedtime").load("passedtime.php");
+          }, 10000);
       });
 
   </script>
-<?php include "../templates/footer.php"; ?>
+<?php include "../templates/footer.php";?>

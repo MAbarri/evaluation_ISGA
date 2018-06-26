@@ -4,11 +4,10 @@
 <?php
 
 require_once '../../connection.php';
-
-unset($_SESSION['timer']);
-unset($_SESSION['limit']);
-unset($_SESSION['time_passed']);
-
+  $currentexam = "";
+  if(isset($_SESSION['currentexam'])) {
+    $currentexam = $_SESSION['currentexam'];
+  }
   try  {
     $sql = "SELECT COUNT(examquestions.questionId) as totalquestion, exams.id as examid, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams
@@ -22,6 +21,13 @@ unset($_SESSION['time_passed']);
 
     $finalResult = array();
     foreach ($result as $exam) {
+      $sql = "SELECT count(etudExam.id) as countresponses
+              FROM etudExam
+              WHERE etudExam.examId =".$exam['examid']." AND etudExam.userId = ".$_SESSION['id'];
+      $statement = $connection->prepare($sql);
+      $statement->execute();
+      $countresponses = $statement->fetch();
+
       $sql = "SELECT *
               FROM etudExam
               INNER JOIN etudExamReponse on etudExamReponse.etudexamId = etudExam.id
@@ -39,7 +45,7 @@ unset($_SESSION['time_passed']);
         $correct++;
       }
       $score = $total > 0 ? $correct/$exam['totalquestion']*100 : 0;
-      array_push($finalResult, array("data"=> $exam, "score" => $score, "total" => $total));
+      array_push($finalResult, array("data"=> $exam, "score" => $score, "total" => $total, "countresponses" => $countresponses));
 
     }
   } catch(PDOException $error) {
@@ -73,7 +79,19 @@ unset($_SESSION['time_passed']);
                 <td><?php echo $row["data"]["totalquestion"] ?></td>
                 <td><?php echo $row["data"]["date"]; ?></td>
                 <td>
-                  <?php if($row['total'] > 0) echo $row["score"]; else echo '<a class="btn btn-success pull-right" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam='.$row["data"]["examid"].'" >Passer l\'Examen</a>'; ?>
+                  <?php
+                  if($currentexam) {
+                    if($row["data"]["examid"] == $currentexam)
+                      echo '<a class="btn btn-success" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam='.$row["data"]["examid"].'" >Passer l\'Examen</a>';
+                    else
+                      echo "Examen En cours";
+                  } else {
+                    if($row['countresponses']['countresponses'] > 0)
+                    echo round($row["score"])."/100";
+                    else echo '<a class="btn btn-success" style="margin: 0 5px;" href="/evaluation_ISGA/public/student/passExam.php?exam='.$row["data"]["examid"].'" >Passer l\'Examen</a>';
+                  }
+                  ?>
+
 
                 </td>
               </tr>

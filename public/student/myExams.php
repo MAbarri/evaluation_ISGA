@@ -5,6 +5,10 @@
 
 require_once '../../connection.php';
 
+unset($_SESSION['timer']);
+unset($_SESSION['limit']);
+unset($_SESSION['time_passed']);
+
   try  {
     $sql = "SELECT COUNT(examquestions.questionId) as totalquestion, exams.id as examid, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams

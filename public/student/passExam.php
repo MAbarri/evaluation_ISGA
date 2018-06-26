@@ -2,11 +2,15 @@
 
 <?php include "../shared/studentnavbar.php"; ?>
 <?php
-
 require_once '../../connection.php';
 
+    if(!isset($_SESSION['timer'])){
+        $_SESSION['timer'] = time();
+        $_SESSION['time_passed'] = 0;
+    }
+
   try  {
-    $sql = "SELECT exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
+    $sql = "SELECT exams.duree, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams
         INNER JOIN users ON users.id = exams.userId
         INNER JOIN typeExam ON typeExam.id = exams.typeExamId
@@ -15,6 +19,7 @@ require_once '../../connection.php';
     $statement->execute();
 
     $examobject = $statement->fetch(PDO::FETCH_ASSOC);
+    $_SESSION['limit'] = $examobject["duree"]*60;
 
   $sqlQuestions = "SELECT questions.id, questions.contenue as contenue, reponse.id as reponseid, reponse.contenue as reponsecontent
   FROM questions
@@ -107,6 +112,8 @@ require_once '../../connection.php';
   }
 
 ?>
+<div id="countdowntimer">
+</div>
   <div class="container">
     <div class="row">
       <div class="col">
@@ -116,7 +123,7 @@ require_once '../../connection.php';
 
           <div class="row">
             <div class="col-md-10">
-              <h2> Examen <?php echo $examobject['date'] ?> <small> Veulliez selectionnez la/les réponses correct </small></h2>
+              <h2> Examen (<?php echo $examobject['duree'] ?>min) <small> Veulliez selectionnez la/les réponses correct ( Temps passée : <?php echo round($_SESSION['time_passed']); ?>Min)</small></h2>
             </div>
             <div class="col-md-2">
             <input class="btn btn-success pull-right" type="submit" name="submit" value="C'est fini">
@@ -152,4 +159,12 @@ require_once '../../connection.php';
       </div>
     </div>
   </div>
+  <script>
+      $(document).ready(function(){
+          setInterval(function() {
+              $("#countdowntimer").load("countdown.php");
+          }, 60000);
+      });
+
+  </script>
 <?php include "../templates/footer.php"; ?>

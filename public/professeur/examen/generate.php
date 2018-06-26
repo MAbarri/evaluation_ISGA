@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
 
         $new_user = array(
           "typeExamId" => $_POST['typeExamId'],
+          "duree" => $_POST['duree'],
           "userId" => $_SESSION['id'],
           "date"     => date("Y-m-d H:i:s")
         );
@@ -123,6 +124,16 @@ if (isset($_POST['submit'])) {
                         <div class="form-group">
                           <label for="contenue">Nombre de Questions</label>
                             <input class="form-control" type="text" name="questionsNombres" id="questions" placeholder="Entrez le nombre de questions ...">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="contenue">Durée</label>
+                            <input class="form-control" type="number" name="duree" id="duree" placeholder="Entrez la duree (minutes) ...">
                         </div>
                       </div>
                     </div>

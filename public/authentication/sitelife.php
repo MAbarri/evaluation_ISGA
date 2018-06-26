@@ -2,7 +2,6 @@
 <?php
   // Init session
   session_start();
-
     // define('__ROOT__', dirname(dirname(__FILE__)));
   // Include db config
   require_once dirname(dirname(dirname(__FILE__))).'\connection.php';

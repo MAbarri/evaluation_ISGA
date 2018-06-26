@@ -6,10 +6,12 @@
 require_once '../../../connection.php';
 
   try  {
-    $sql = "SELECT CONCAT(users.firstName ,' ', users.lastName) as owner, typequestion.name as type, questions.contenue, difficulte
+    $sql = "SELECT COUNT(reponse.id) as totalreponses, CONCAT(users.firstName ,' ', users.lastName) as owner, typequestion.name as type, questions.contenue, difficulte
     FROM questions
         INNER JOIN users ON users.id = questions.userId
-        INNER JOIN typequestion ON typequestion.id = questions.typeQuestionId";
+        INNER JOIN typequestion ON typequestion.id = questions.typeQuestionId
+        INNER JOIN reponse ON reponse.questionId = questions.id
+        GROUP BY reponse.questionId";
     $statement = $connection->prepare($sql);
     $statement->execute();
 
@@ -30,8 +32,8 @@ require_once '../../../connection.php';
                 <td>Propriétaire</td>
                 <td>Type</td>
                 <td>Contenue</td>
-                <td>Choix</td>
-                <td>Difficulté</td>
+                <td>Nombre de Choix</td>
+                <!-- <td>Difficulté</td> -->
               </tr>
 
               <?php foreach ($result as $row) : ?>
@@ -39,8 +41,8 @@ require_once '../../../connection.php';
                 <td><?php echo $row["owner"]; ?></td>
                 <td><?php echo $row["type"]; ?></td>
                 <td><?php echo $row["contenue"]; ?></td>
-                <td><?php echo "choix" /*$row["choix"];*/ ?></td>
-                <td><?php echo $row["difficulte"]; ?></td>
+                <td><?php echo $row["totalreponses"]; ?></td>
+                <!-- <td><?php echo $row["difficulte"]; ?></td> -->
               </tr>
             <?php endforeach; ?>
             </table>

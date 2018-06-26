@@ -16,6 +16,19 @@ if (isset($_POST['submit'])) {
     //
     // $result = $statement->fetchAll();
       try  {
+
+      $questionslimit = $_POST['questionsNombres']*$_POST['variants'];
+
+      $sqlQuestion = "SELECT * FROM questions LIMIT ".$questionslimit;
+      $statementQuestion = $connection->prepare($sqlQuestion);
+      $statementQuestion->execute();
+
+      $questionList = $statementQuestion->fetchAll();
+
+      for ($i=0; $i < $_POST['variants']; $i++) {
+
+        $usedQuestion = array();
+
         $new_user = array(
           "typeExamId" => $_POST['typeExamId'],
           "userId" => $_SESSION['id'],
@@ -33,30 +46,32 @@ if (isset($_POST['submit'])) {
         $statement->execute($new_user);
         $examid = $connection->lastInsertId();
 
-        $sqlQuestion = "SELECT * FROM questions LIMIT ".$_POST['questionsNombres'];
-        $statementQuestion = $connection->prepare($sqlQuestion);
-        $statementQuestion->execute();
+        for ($j=0; $j < $_POST['questionsNombres'] && $j< count($questionList); $j++) {
+          $questionIndex = rand(0,count($questionList)-1);
+          if (!in_array($questionIndex, $usedQuestion)) {
+            $questionexam = array(
+              "examId" => $examid,
+              "questionId" => $questionList[$questionIndex]['id']
+            );
 
-        $questionList = $statementQuestion->fetchAll();
+            $sqlquestionexam = sprintf(
+              "INSERT INTO %s (%s) values (%s)",
+              "examQuestions",
+              implode(", ", array_keys($questionexam)),
+              ":" . implode(", :", array_keys($questionexam))
+            );
 
-        foreach($questionList as $singleQuestion){
-          $questionexam = array(
-            "examId" => $examid,
-            "questionId" => $singleQuestion['id']
-          );
-
-          $sqlquestionexam = sprintf(
-            "INSERT INTO %s (%s) values (%s)",
-            "examQuestions",
-            implode(", ", array_keys($questionexam)),
-            ":" . implode(", :", array_keys($questionexam))
-          );
-
-          $statementquestionexam = $connection->prepare($sqlquestionexam);
-          $statementquestionexam->execute($questionexam);
-
+            $statementquestionexam = $connection->prepare($sqlquestionexam);
+            $statementquestionexam->execute($questionexam);
+            array_push($usedQuestion, $questionIndex);
+          } else {
+            $j--;
+          }
 
         }
+
+      }
+
           header('location: list.php');
         } catch(PDOException $error) {
           echo $sql . "<br>" . $error->getMessage();

@@ -6,7 +6,7 @@
       <div class="col">
         <div class="card card-body bg-light mt-5">
           <h2>Espace <?php echo $_SESSION['role']; ?></h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+          <p>Bienvenue Dans le Tableau de Bord.</p>
         </div>
       </div>
     </div>

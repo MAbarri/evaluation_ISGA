@@ -55,10 +55,10 @@ if(!isset($_SESSION['email']) || empty($_SESSION['email'])){
     					<li class="dropdown">
     						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> Evaluation</a>
     						<ul class="dropdown-menu">
-    							<li><a href="/evaluation_ISGA/public/admin/question/index.php">Gestion des Questions</a></li>
+    							<!-- <li><a href="/evaluation_ISGA/public/admin/question/index.php">Gestion des Questions</a></li> -->
     							<li><a href="/evaluation_ISGA/public/admin/questiontypes/index.php">Gestion des types de Questions</a></li>
                   <li class="divider"></li>
-                  <li><a href="/evaluation_ISGA/public/admin/examens/index.php">Gestion des Examens</a></li>
+                  <!-- <li><a href="/evaluation_ISGA/public/admin/examens/index.php">Gestion des Examens</a></li> -->
     							<li><a href="/evaluation_ISGA/public/admin/examentypes/index.php">Gestion des types de Examens</a></li>
     						</ul>
     					</li>

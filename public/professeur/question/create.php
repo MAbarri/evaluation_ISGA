@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
             $responssestatement->execute($arrayItem);
           }
 
-          header('location: ../../index.php');
+          header('location: list.php');
         } catch(PDOException $error) {
           echo $sql . "<br>" . $error->getMessage();
         }

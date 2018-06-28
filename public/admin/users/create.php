@@ -30,16 +30,58 @@ if (isset($_POST['submit'])) {
           "userTypeId"     => $_POST['userTypeId'],
           "password"  => password_hash($_POST['password'], PASSWORD_DEFAULT)
         );
-
         $sql = sprintf(
           "INSERT INTO %s (%s) values (%s)",
           "users",
           implode(", ", array_keys($new_user)),
           ":" . implode(", :", array_keys($new_user))
         );
-
         $statement = $connection->prepare($sql);
         $statement->execute($new_user);
+        $userid = $connection->lastInsertId();
+
+        foreach ($_POST['niveaux'] as $selectedOption) {
+            $new_userniveaux = array(
+              "userId" => $userid,
+              "niveauId" => $selectedOption
+            );
+            $sql = sprintf(
+              "INSERT INTO %s (%s) values (%s)",
+              "userNiveaux",
+              implode(", ", array_keys($new_userniveaux)),
+              ":" . implode(", :", array_keys($new_userniveaux))
+            );
+            $statement = $connection->prepare($sql);
+            $statement->execute($new_userniveaux);
+        }
+        foreach ($_POST['filieres'] as $selectedOption) {
+            $new_userfilliere = array(
+              "userId" => $userid,
+              "filiereId" => $selectedOption
+            );
+            $sql = sprintf(
+              "INSERT INTO %s (%s) values (%s)",
+              "userFilieres",
+              implode(", ", array_keys($new_userfilliere)),
+              ":" . implode(", :", array_keys($new_userfilliere))
+            );
+            $statement = $connection->prepare($sql);
+            $statement->execute($new_userfilliere);
+        }
+        foreach ($_POST['modules'] as $selectedOption) {
+            $new_usermodule = array(
+              "userId" => $userid,
+              "moduleId" => $selectedOption
+            );
+            $sql = sprintf(
+              "INSERT INTO %s (%s) values (%s)",
+              "userModules",
+              implode(", ", array_keys($new_usermodule)),
+              ":" . implode(", :", array_keys($new_usermodule))
+            );
+            $statement = $connection->prepare($sql);
+            $statement->execute($new_usermodule);
+        }
 
         header('location: index.php');
       } catch(PDOException $error) {
@@ -55,7 +97,34 @@ if (isset($_POST['submit'])) {
     $statement = $connection->prepare($sql);
     $statement->execute();
 
-    $result = $statement->fetchAll();
+    $usertypes = $statement->fetchAll();
+  } catch(PDOException $error) {
+      echo $sql . "<br>" . $error->getMessage();
+  }
+  try  {
+    $sql = "SELECT * FROM filieres";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+
+    $filliers = $statement->fetchAll();
+  } catch(PDOException $error) {
+      echo $sql . "<br>" . $error->getMessage();
+  }
+  try  {
+    $sql = "SELECT * FROM modules";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+
+    $modules = $statement->fetchAll();
+  } catch(PDOException $error) {
+      echo $sql . "<br>" . $error->getMessage();
+  }
+  try  {
+    $sql = "SELECT * FROM niveaux";
+    $statement = $connection->prepare($sql);
+    $statement->execute();
+
+    $niveaux = $statement->fetchAll();
   } catch(PDOException $error) {
       echo $sql . "<br>" . $error->getMessage();
   }
@@ -96,7 +165,7 @@ if (isset($_POST['submit'])) {
                     <div class="form-group">
                     <label for="type">Type</label>
                     <select class="form-control" id="type" name="userTypeId">
-                    <?php foreach ($result as $row) : ?>
+                    <?php foreach ($usertypes as $row) : ?>
                       <option  value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
                     <?php endforeach; ?>
                     </select>
@@ -118,6 +187,37 @@ if (isset($_POST['submit'])) {
                           <input type="password" name="confirm_password" class="form-control form-control-lg">
                           <span class="control-label"><?php echo $confirm_password_err; ?></span>
                         </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                        <label for="niveau">Niveaux</label>
+                        <select class="form-control" id="niveau" multiple="multiple" name="niveaux[]">
+                        <?php foreach ($niveaux as $row) : ?>
+                          <option  value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                      </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                        <label for="filieres">Filiéres</label>
+                        <select class="form-control" id="filieres" multiple="multiple" name="filieres[]">
+                        <?php foreach ($filliers as $row) : ?>
+                          <option  value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                      </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                        <label for="modules">Modules</label>
+                        <select class="form-control" id="modules" multiple="multiple" name="modules[]">
+                        <?php foreach ($modules as $row) : ?>
+                          <option  value="<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></option>
+                        <?php endforeach; ?>
+                        </select>
+                      </div>
                       </div>
                     </div>
                   </div>

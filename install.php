@@ -121,6 +121,24 @@ try {
 	CONSTRAINT userId  FOREIGN KEY (userId) REFERENCES users(id),
 	CONSTRAINT typeExamId  FOREIGN KEY (typeExamId) REFERENCES typeExam(id)
 )',
+'CREATE TABLE examsModules (
+  moduleId int( 11 ) NOT NULL ,
+  CONSTRAINT moduleId  FOREIGN KEY (moduleId) REFERENCES modules(id),
+  examId int( 11 ) NOT NULL ,
+  CONSTRAINT examId  FOREIGN KEY (examId) REFERENCES exams(id)
+)',
+'CREATE TABLE examsNiveaux (
+  niveauId int( 11 ) NOT NULL ,
+  CONSTRAINT niveauId  FOREIGN KEY (niveauId) REFERENCES niveaux(id),
+  examId int( 11 ) NOT NULL ,
+  CONSTRAINT examId  FOREIGN KEY (examId) REFERENCES exams(id)
+)',
+'CREATE TABLE examsFilieres (
+  filiereId  int( 11 ) NOT NULL ,
+  CONSTRAINT filiereId   FOREIGN KEY (filiereId ) REFERENCES filieres(id),
+  examId int( 11 ) NOT NULL ,
+  CONSTRAINT examId  FOREIGN KEY (examId) REFERENCES exams(id)
+)',
 'CREATE TABLE examQuestions (
 	examId int( 11 ) NOT NULL ,
 	CONSTRAINT examId FOREIGN KEY (examId ) REFERENCES exams(id),

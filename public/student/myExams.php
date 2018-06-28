@@ -14,6 +14,21 @@ require_once '../../connection.php';
         INNER JOIN users ON users.id = exams.userId
         INNER JOIN typeExam ON typeExam.id = exams.typeExamId
         INNER JOIN examquestions ON exams.id = examquestions.examId
+
+        INNER JOIN examsModules ON examsModules.examId = exams.id
+        INNER JOIN modules ON modules.id = examsModules.moduleId
+        INNER JOIN userModules ON userModules.moduleId = modules.id
+
+        INNER JOIN examsNiveaux ON examsNiveaux.examId = exams.id
+        INNER JOIN niveaux ON niveaux.id = examsNiveaux.niveauId
+        INNER JOIN userNiveaux ON userNiveaux.niveauId = niveaux.id
+
+        INNER JOIN examsFilieres ON examsFilieres.examId = exams.id
+        INNER JOIN filieres ON filieres.id = examsFilieres.filiereId
+        INNER JOIN userFilieres ON userFilieres.filiereId = filieres.id
+
+        WHERE userFilieres.userId = ".$_SESSION['id']." AND userNiveaux.userId = ".$_SESSION['id']." AND userModules.userId = ".$_SESSION['id']."
+        
     GROUP BY examquestions.examId";
     $statement = $connection->prepare($sql);
     $statement->execute();

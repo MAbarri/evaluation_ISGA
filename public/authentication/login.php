@@ -95,6 +95,7 @@
     <div class="row">
       <div class="col-md-6 mx-auto">
         <div class="card card-body bg-light mt-5">
+          <img style="width: 300px; margin: auto; margin-bottom: 40px;" src="/evaluation_ISGA/public/img/logo.png" alt="">
           <h2>Login</h2>
           <p>Fill in your credentials</p>
           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">

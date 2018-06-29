@@ -15,20 +15,32 @@ if (isset($_POST['submit'])) {
 
       $sqlQuestion = "SELECT * FROM questions
       INNER JOIN questionModules ON questionModules.questionId = questions.id
-      INNER JOIN modules ON modules.id = questionModules.moduleId
-      INNER JOIN userModules ON userModules.moduleId = modules.id
-
       INNER JOIN questionNiveaux ON questionNiveaux.questionId = questions.id
-      INNER JOIN niveaux ON niveaux.id = questionNiveaux.niveauId
-      INNER JOIN userNiveaux ON userNiveaux.niveauId = niveaux.id
-
       INNER JOIN questionFilieres ON questionFilieres.questionId = questions.id
-      INNER JOIN filieres ON filieres.id = questionFilieres.filiereId
-      INNER JOIN userFilieres ON userFilieres.filiereId = filieres.id
+      WHERE ";
 
-      WHERE userFilieres.userId = ".$_SESSION['id']." AND userNiveaux.userId = ".$_SESSION['id']." AND userModules.userId = ".$_SESSION['id']."
+      $sqlQuestion = $sqlQuestion . "(";
 
-      LIMIT ".$questionslimit;
+      foreach ($_POST['niveaux'] as $key=>$selectedOption) {
+        $sqlQuestion = $sqlQuestion . "questionNiveaux.niveauId = '".$selectedOption."'";
+        if($key < count($_POST['niveaux'])-1)
+          $sqlQuestion."' OR ";
+      }
+      $sqlQuestion = $sqlQuestion . ") AND (";
+      foreach ($_POST['filieres'] as $key=>$selectedOption) {
+        $sqlQuestion = $sqlQuestion . "questionFilieres.filiereId = '".$selectedOption."'";
+        if($key < count($_POST['filieres'])-1)
+          $sqlQuestion."' OR ";
+      }
+      $sqlQuestion = $sqlQuestion . ") AND (";
+      foreach ($_POST['modules'] as $key=>$selectedOption) {
+        $sqlQuestion = $sqlQuestion . "questionModules.moduleId = '".$selectedOption."'";
+        if($key < count($_POST['modules'])-1)
+          $sqlQuestion."' OR ";
+      }
+      $sqlQuestion = $sqlQuestion . ") LIMIT ".$questionslimit;
+
+      echo $sqlQuestion;
       $statementQuestion = $connection->prepare($sqlQuestion);
       $statementQuestion->execute();
 
@@ -126,7 +138,7 @@ if (isset($_POST['submit'])) {
 
           header('location: list.php');
         } catch(PDOException $error) {
-          echo $sql . "<br>" . $error->getMessage();
+          echo $sqlQuestion . "<br>" . $error->getMessage();
         }
 }
 

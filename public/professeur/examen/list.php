@@ -6,10 +6,12 @@
 require_once '../../../connection.php';
 
   try  {
-    $sql = "SELECT exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
+    $sql = "SELECT COUNT(examquestions.questionId) as totalquestion, exams.date, CONCAT(users.firstName ,' ', users.lastName) as owner, typeExam.name as type
     FROM exams
         INNER JOIN users ON users.id = exams.userId
-        INNER JOIN typeExam ON typeExam.id = exams.typeExamId";
+        INNER JOIN typeExam ON typeExam.id = exams.typeExamId
+        INNER JOIN examquestions ON exams.id = examquestions.examId
+        GROUP BY examquestions.examId";
     $statement = $connection->prepare($sql);
     $statement->execute();
 
@@ -44,7 +46,7 @@ require_once '../../../connection.php';
               <tr>
                 <td><?php echo $row["owner"]; ?></td>
                 <td><?php echo $row["type"]; ?></td>
-                <td><?php echo "nb Question" /*$row["choix"];*/ ?></td>
+                <td><?php echo $row["totalquestion"]; ?></td>
                 <td><?php echo $row["date"]; ?></td>
               </tr>
             <?php endforeach; ?>
